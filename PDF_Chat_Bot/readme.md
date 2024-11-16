@@ -2,6 +2,12 @@
 
 **PDF QueryBot** is a smart, interactive app built with **Streamlit**, **Langchain**, and **Google Generative AI** to turn your documents into powerful knowledge hubs. Forget scrolling through endless pages—just upload your PDFs and start asking questions. Your documents are now just a conversation away!
 
+---
+
+### **Screenshots**
+![](https://github.com/harshitpathak18/LLM-Projects/blob/main/PDF_Chat_Bot/screenshots/1.png)
+---
+
 ### 🚀 **Key Features:**
 1. **Instant PDF Text Extraction**  
    Upload your PDF, and let the bot work its magic! Extracts text from your documents in seconds.
