@@ -6,7 +6,10 @@
 
 ### **Screenshots**
 ![](https://github.com/harshitpathak18/LLM-Projects/blob/main/PDF_Chat_Bot/screenshots/1.png)
----
+![](https://github.com/harshitpathak18/LLM-Projects/blob/main/PDF_Chat_Bot/screenshots/2.png)
+![](https://github.com/harshitpathak18/LLM-Projects/blob/main/PDF_Chat_Bot/screenshots/3.png)
+![](https://github.com/harshitpathak18/LLM-Projects/blob/main/PDF_Chat_Bot/screenshots/4.png)
+v---
 
 ### 🚀 **Key Features:**
 1. **Instant PDF Text Extraction**  
