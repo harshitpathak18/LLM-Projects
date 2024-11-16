@@ -133,7 +133,7 @@ def get_text_chunks(text):
     Returns:
         list: List of text chunks.
     """
-    splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=100)
+    splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=1000)
     chunks = splitter.split_text(text)
     return chunks
 
