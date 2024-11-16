@@ -1,6 +1,6 @@
 PyPDF2
 faiss-cpu
-lamgchain
+langchain
 streamlit
 python-dotenv
 google-generativeai 
