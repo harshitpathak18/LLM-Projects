@@ -2,6 +2,7 @@ import os
 import logging
 import streamlit as st
 from PyPDF2 import PdfReader
+from dotenv import load_dotenv
 import google.generativeai as genai
 from langchain.prompts import PromptTemplate
 from langchain_community.vectorstores import FAISS
@@ -10,6 +11,11 @@ from langchain.chains.question_answering import load_qa_chain
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import UnstructuredPDFLoader
+
+
+# Load environment variables from the .env file
+load_dotenv()
+
 
 # Set up logging to both console and a file
 def setup_logging():
@@ -44,7 +50,7 @@ logger = setup_logging()
 
 # Check for Google API key
 if "GOOGLE_API_KEY" not in os.environ:
-    os.environ["GOOGLE_API_KEY"] = "AIzaSyCn5BtlnY1xwzvQm_MgMlUIHIxJ_AyT7Tk"
+    os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
 
 # Styling for the Streamlit page
 def style_page():
