@@ -11,9 +11,36 @@ from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import UnstructuredPDFLoader
 
-# Set up logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+# Set up logging to both console and a file
+def setup_logging():
+    """
+    Sets up logging to both console and file.
+    """
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.INFO)
+
+    # Create a file handler to write logs to a file
+    file_handler = logging.FileHandler('app_logs.log')
+    file_handler.setLevel(logging.INFO)
+
+    # Create a formatter and set it for the file handler
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    file_handler.setFormatter(formatter)
+
+    # Add the file handler to the logger
+    logger.addHandler(file_handler)
+
+    # Optionally, add a stream handler to output logs to the console
+    stream_handler = logging.StreamHandler()
+    stream_handler.setLevel(logging.INFO)
+    stream_handler.setFormatter(formatter)
+    logger.addHandler(stream_handler)
+
+    return logger
+
+# Set up logging when the script starts
+logger = setup_logging()
+
 
 # Check for Google API key
 if "GOOGLE_API_KEY" not in os.environ:
