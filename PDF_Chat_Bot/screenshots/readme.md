@@ -1,1 +1,1 @@
-It Contains Working Sceenshots
+Sceenshots of the project
