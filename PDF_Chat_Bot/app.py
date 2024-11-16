@@ -159,7 +159,7 @@ def get_conversational_chain():
         Langchain chain: Configured QA chain for handling user questions.
     """
     prompt_template = """
-    Answer the question as detailed as possible from the provided context and try to find out that question. please answer the question from the context only.
+    Answer the question as detailed as possible from the provided context and try to find out that question. please answer the question from the context only. if you cannot answer the question from the context then please reply, "Question can not be answered from the provided context"
     Context:\n {context}?\n
     Question: \n{question}\n
     Answer:
