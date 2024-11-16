@@ -159,7 +159,7 @@ def get_conversational_chain():
         Langchain chain: Configured QA chain for handling user questions.
     """
     prompt_template = """
-    Answer the question as detailed as possible from the provided context and try to find out that question. please answer the question. If the answer is not in the provided context, just say, "Answer is not available in the context".
+    Answer the question as detailed as possible from the provided context and try to find out that question. please answer the question. If the answer is out of the provided context then only just say, "Answer is not available in the context".
     Context:\n {context}?\n
     Question: \n{question}\n
     Answer:
