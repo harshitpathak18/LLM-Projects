@@ -223,17 +223,14 @@ def main():
     st.write("Effortless Conversations with Your Documents!")
     
     pdf_docs = st.file_uploader("Upload PDF Files then Submit & Process", accept_multiple_files=True)
-    c1, c2 = st.columns([3,1])
-    with c1:
-        if st.button("Submit & Process"):
-            with st.spinner("Processing..."):
-                raw_text = get_pdf_text(pdf_docs)
-                text_chunks = get_text_chunks(raw_text)
-                get_vector_store(text_chunks)
-                st.success("Processing done. Now you can ask questions.")
+    if st.button("Submit & Process"):
+        with st.spinner("Processing..."):
+            raw_text = get_pdf_text(pdf_docs)
+            text_chunks = get_text_chunks(raw_text)
+            get_vector_store(text_chunks)
+            st.success("Processing done. Now you can ask questions.")
 
-    with c2: 
-        st.button('Clear Chat History', on_click=clear_chat_history)
+    st.button('Clear Chat History', on_click=clear_chat_history)
         
         
     # Only allow querying if PDFs are uploaded and processed
