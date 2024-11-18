@@ -73,135 +73,150 @@ def style_page():
             """
     st.markdown(hide_st_style, unsafe_allow_html=True)
 
+# Extract text from PDF
 def get_pdf_text(pdf_docs):
     """
     Extracts text content from uploaded PDF files.
+    
+    Args:
+        pdf_docs (list): List of uploaded PDF files.
+        
+    Returns:
+        str: Concatenated string containing text from all pages of all PDFs.
     """
-    try:
-        text = ""
-        for pdf in pdf_docs:
-            pdf_reader = PdfReader(pdf)
-            for page in pdf_reader.pages:
-                if page is not None:
-                    text += page.extract_text()
-        if not text.strip():
-            raise ValueError("The uploaded PDF(s) contain no readable text.")
-        return text
-    except Exception as e:
-        st.error(f"Error reading PDF files: {e}")
-        return ""
+    text = ""
+    for pdf in pdf_docs:
+        pdf_reader = PdfReader(pdf)
+        for page in pdf_reader.pages:
+            text += page.extract_text()
+    return text
 
+# Split text into chunks for processing
 def get_text_chunks(text):
     """
-    Split the extracted text into smaller chunks for processing.
+    Split the extracted text into smaller chunks for embedding processing.
+    
+    Args:
+        text (str): Extracted text from PDF files.
+        
+    Returns:
+        list: List of text chunks.
     """
-    try:
-        splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=100)
-        return splitter.split_text(text)
-    except Exception as e:
-        st.error(f"Error splitting text into chunks: {e}")
-        return []
+    splitter = RecursiveCharacterTextSplitter(chunk_size=10000, chunk_overlap=100)
+    chunks = splitter.split_text(text)
+    return chunks
 
+# Generate vector store from chunks of text
 def get_vector_store(chunks):
     """
-    Generate a FAISS vector store from text chunks.
+    Generate a FAISS vector store from text chunks, and save it locally.
+    
+    Args:
+        chunks (list): List of text chunks.
     """
-    try:
-        embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
-        vector_store = FAISS.from_texts(chunks, embedding=embeddings)
-        vector_store.save_local("faiss_index")
-    except Exception as e:
-        st.error(f"Error creating vector store: {e}")
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+    vector_store = FAISS.from_texts(chunks, embedding=embeddings)
+    vector_store.save_local("faiss_index")
 
-def user_input(user_question):
-    """
-    Handles user input and searches the vector store for an answer.
-    """
-    try:
-        embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
-        if not os.path.exists("faiss_index"):
-            raise FileNotFoundError("Vector store not found. Please process PDFs first.")
-        new_db = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
-        docs = new_db.similarity_search(user_question)
-        chain = get_conversational_chain()
-        response = chain({"input_documents": docs, "question": user_question}, return_only_outputs=True)
-        return response
-    except Exception as e:
-        st.error(f"Error generating a response: {e}")
-        return {"output_text": "Sorry, an error occurred while processing your question."}
-
+# Create a conversational QA chain
 def get_conversational_chain():
     """
-    Creates a QA chain using Langchain and Google Generative AI.
+    Creates a question-answering chain using Langchain and Google Generative AI.
+    
+    Returns:
+        Langchain chain: Configured QA chain for handling user questions.
     """
-    try:
-        prompt_template = """
-        Answer the question as detailed as possible from the provided context."
-        Context: {context}
-        Question: {question}
-        Answer:
-        """
-        model = ChatGoogleGenerativeAI(model="gemini-1.0-pro", temperature=0.5)
-        prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
-        return load_qa_chain(llm=model, chain_type="stuff", prompt=prompt)
-    except Exception as e:
-        st.error(f"Error initializing conversational chain: {e}")
-        return None
+    prompt_template = """
+    Answer the question as detailed as possible from the provided context from single of multiple pdfs"
+    Context:\n {context}?\n
+    Question: \n{question}\n
+    Answer:
+    """
+    model = ChatGoogleGenerativeAI(model="gemini-1.0-pro", temperature=0.5)
+    prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
+    chain = load_qa_chain(llm=model, chain_type="stuff", prompt=prompt)
+    return chain
 
+# Clear chat history in the session state
 def clear_chat_history():
+    """
+    Clears the chat history stored in the session state.
+    """
     st.session_state.messages = [{"role": "assistant", "content": "Ask me any question."}]
+
+# Handle user input and fetch response from vector store
+def user_input(user_question):
+    """
+    Handles the user's query by searching the vector store and getting an answer.
+    
+    Args:
+        user_question (str): The question provided by the user.
+        
+    Returns:
+        dict: The response generated by the model based on the vector store search.
+    """
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+    new_db = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
+    docs = new_db.similarity_search(user_question)
+
+    chain = get_conversational_chain()
+    response = chain({"input_documents": docs, "question": user_question}, return_only_outputs=True)
+    
+    return response
 
 def main():
     """
-    Main function to handle the Streamlit app.
+    Main function to drive the application. Handles the user interface, file uploads, and interactions.
     """
+    
+    # Main content area
     st.title("PDF QueryBot")
     st.write("Effortless Conversations with Your Documents!")
+    pdf_docs = st.file_uploader("Upload PDF Files", accept_multiple_files=True)
+    if st.button("Submit & Process"):
+        with st.spinner("Processing..."):
+            raw_text = get_pdf_text(pdf_docs)
+            text_chunks = get_text_chunks(raw_text)
+            get_vector_store(text_chunks)
+            st.success("Processing done. Now you can ask questions.")
 
-    # File uploader with exception handling
-    try:
-        pdf_docs = st.file_uploader("Upload PDF Files", accept_multiple_files=True, type=["pdf"])
-        if st.button("Submit & Process"):
-            if not pdf_docs:
-                st.warning("Please upload at least one PDF file.")
-                return
-            with st.spinner("Processing..."):
-                raw_text = get_pdf_text(pdf_docs)
-                if not raw_text:
-                    return
-                text_chunks = get_text_chunks(raw_text)
-                if not text_chunks:
-                    return
-                get_vector_store(text_chunks)
-                st.success("Processing done. You can now ask questions!")
-    except Exception as e:
-        st.error(f"Error during file upload or processing: {e}")
-
-    # Chatbot functionality
-    if os.path.exists("faiss_index"):
-        if "messages" not in st.session_state:
+    # Only allow querying if PDFs are uploaded and processed
+    if "faiss_index" in os.listdir() and pdf_docs:  
+        # Initialize chat history if not present
+        if "messages" not in st.session_state.keys():
             st.session_state.messages = [{"role": "assistant", "content": "Ask me any question."}]
 
+        # Display the chat history
         for message in st.session_state.messages:
             with st.chat_message(message["role"]):
                 st.write(message["content"])
 
+        # Handling user input and displaying response
         if prompt := st.chat_input():
             st.session_state.messages.append({"role": "user", "content": prompt})
             with st.chat_message("user"):
                 st.write(prompt)
 
-            with st.chat_message("assistant"):
-                with st.spinner("Generating Answer..."):
-                    response = user_input(prompt)
-                    answer = response.get("output_text", "Unable to generate a response.")
-                    st.write(answer)
-                    st.session_state.messages.append({"role": "assistant", "content": answer})
+            # Get the bot's response to the user input
+            if st.session_state.messages[-1]["role"] != "assistant":
+                with st.chat_message("assistant"):
+                    with st.spinner("Generating Answer..."):
+                        response = user_input(prompt)
+                        placeholder = st.empty()
+                        full_response = ''
+                        for item in response['output_text']:
+                            full_response += item
+                            placeholder.markdown(full_response)
+                        placeholder.markdown(full_response)
 
-        st.button("Clear Chat History", on_click=clear_chat_history)
+                # Append the assistant's response to the session state
+                message = {"role": "assistant", "content": full_response}
+                st.session_state.messages.append(message)
+
+            st.button('Clear Chat History', on_click=clear_chat_history)
     else:
-        st.info("Please upload and process PDFs before asking questions.")
-
+        st.write("Please upload some PDFs and process them before asking questions.")
+    
 if __name__ == "__main__":
     style_page()
     main()
