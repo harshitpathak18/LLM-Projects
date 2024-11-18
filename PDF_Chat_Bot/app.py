@@ -62,9 +62,9 @@ def style_page():
             }
             .st-emotion-cache-7tauuy{padding: 3rem 1rem 1rem;}
 
-            .st-emotion-cache-1jicfl2 {
+            .st-emotion-cache-1jicfl2,.st-emotion-cache-7tauuy {
                 width: 100%;
-                padding: 5px 10px 10px 10px;
+                padding: 5px 12px 12px 12px;
                 min-width: auto;
                 max-width: initial;
             }
