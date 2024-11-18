@@ -32,7 +32,7 @@ def style_page():
     hide_st_style = """
             <style>
             [data-testid="stAppViewContainer"] {
-                background-image: url('https://digitalsynopsis.com/wp-content/uploads/2017/07/beautiful-color-ui-gradients-backgrounds-royal.png');
+                background-image: url('https://i.pinimg.com/736x/bd/6d/39/bd6d39cf69e3c264d8830b6bd508e3a6.jpg');
                 background-size: cover;
                 margin-top: 0px; /* Set margin-top to 0px to remove space */
             }
