@@ -186,16 +186,17 @@ def main():
         if not pdf_docs:
             st.info("Please upload at least one PDF file")
         else:
-            with st.spinner("Processing..."):
-                try:
-                    # Processing uploaded PDFs
-                    raw_text = get_pdf_text(pdf_docs)
-                    text_chunks = get_text_chunks(raw_text)
-                    get_vector_store(text_chunks)
-                    st.success("Processing done. Now you can ask questions.")
-                except Exception as e:
-                    st.error(f"An error occurred during PDF processing: {str(e)}")
-                    return
+            with st.button("Submit & Process"):
+                with st.spinner("Processing..."):
+                    try:
+                        # Processing uploaded PDFs
+                        raw_text = get_pdf_text(pdf_docs)
+                        text_chunks = get_text_chunks(raw_text)
+                        get_vector_store(text_chunks)
+                        st.success("Processing done. Now you can ask questions.")
+                    except Exception as e:
+                        st.error(f"An error occurred during PDF processing: {str(e)}")
+                        return
 
         # Ensure querying is only allowed after processing
         if "faiss_index" in os.listdir() and pdf_docs:
