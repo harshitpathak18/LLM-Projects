@@ -6,10 +6,13 @@
 ---
 
 ### **Screenshots**
-![](https://github.com/harshitpathak18/LLM-Projects/blob/main/PDF_Chat_Bot/screenshots/1.png)
-![](https://github.com/harshitpathak18/LLM-Projects/blob/main/PDF_Chat_Bot/screenshots/2.png)
-![](https://github.com/harshitpathak18/LLM-Projects/blob/main/PDF_Chat_Bot/screenshots/3.png)
-
+<table>
+  <tr>
+    <td><img src="https://github.com/harshitpathak18/LLM-Projects/blob/main/PDF_Chat_Bot/screenshots/1.jpg" alt="Screenshot 1" /></td>
+    <td><img src="https://github.com/harshitpathak18/LLM-Projects/blob/main/PDF_Chat_Bot/screenshots/2.jpg" alt="Screenshot 2" /></td>
+    <td><img src="https://github.com/harshitpathak18/LLM-Projects/blob/main/PDF_Chat_Bot/screenshots/3.jpg" alt="Screenshot 3" /></td>
+  </tr>
+</table>
 ---
 
 ### 🚀 **Key Features:**
