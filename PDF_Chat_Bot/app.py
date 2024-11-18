@@ -64,7 +64,7 @@ def style_page():
 
             .st-emotion-cache-1jicfl2 {
                 width: 100%;
-                padding: 5px 5px 5px 5px;
+                padding: 5px 10px 10px 10px;
                 min-width: auto;
                 max-width: initial;
             }
