@@ -61,6 +61,13 @@ def style_page():
                 background-color: rgba(8, 22, 40, 0.8);
             }
             .st-emotion-cache-7tauuy{padding: 3rem 1rem 1rem;}
+
+            .st-emotion-cache-1jicfl2 {
+                width: 100%;
+                padding: 5px 2px 2px 2px;
+                min-width: auto;
+                max-width: initial;
+            }
             
             </style>
             """
