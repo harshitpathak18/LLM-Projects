@@ -1,6 +1,5 @@
 import getpass
 import os
-import faiss
 import shutil
 import streamlit as st
 from PyPDF2 import PdfReader
@@ -122,7 +121,7 @@ def get_vector_store(chunks):
     Args:
         chunks (list): List of text chunks.
     """
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/embeddings")
+    embeddings = GoogleGenerativeAIEmbeddings(model="text-embedding-ada-002")
     
     # Remove the existing FAISS index directory if it exists
     if os.path.exists("faiss_index"):
