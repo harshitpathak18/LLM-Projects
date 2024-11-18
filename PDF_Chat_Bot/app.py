@@ -199,8 +199,11 @@ def main():
                     try:
                         # Processing uploaded PDFs
                         raw_text = get_pdf_text(pdf_docs)
+                        st.write("Done1")
                         text_chunks = get_text_chunks(raw_text)
+                        st.write("Done2")
                         get_vector_store(text_chunks)
+                        st.write("Done3")
                         st.success("Processing done. Now you can ask questions.")
                     except Exception as e:
                         st.error(f"An error occurred during PDF processing: {str(e)}")
