@@ -186,7 +186,7 @@ def main():
         if not pdf_docs:
             st.info("Please upload at least one PDF file")
         else:
-            with st.button("Submit & Process"):
+            if st.button("Submit & Process"):
                 with st.spinner("Processing..."):
                     try:
                         # Processing uploaded PDFs
