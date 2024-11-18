@@ -188,7 +188,7 @@ def main():
         st.write("Effortless Conversations with Your Documents!")
         
         # File uploader
-        pdf_docs = st.file_uploader("Upload PDF Files", accept_multiple_files=True)
+        pdf_docs = st.file_uploader("Upload PDF Files", accept_multiple_files=True, type=["pdf"])
 
         if not pdf_docs:
             st.info("Please upload at least one PDF file")
