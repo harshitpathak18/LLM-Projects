@@ -27,9 +27,7 @@ def style_page():
     st.set_page_config(
         page_title="PDF QueryBot",
         page_icon="",
-        layout="wide",
-        # initial_sidebar_state="collapsed",
-    )
+        layout="wide")
 
     hide_st_style = """
             <style>
