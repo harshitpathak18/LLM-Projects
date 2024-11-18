@@ -69,8 +69,8 @@ def style_page():
                 max-width: initial;
             }
 
-            ._terminalButton_rix23_138 {
-                visibility: hidden;
+            section.stMain.st-emotion-cache-bm2z3a.ea3mdgi8 {
+                margin-bottom: 2.9rem;
             }
             
             </style>
