@@ -16,10 +16,12 @@ from langchain_community.document_loaders import UnstructuredPDFLoader
 # Load environment variables from the .env file
 load_dotenv()
 
-# Check for Google API key
-if "GOOGLE_API_KEY" not in os.environ:
-    # os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
-    os.environ["GOOGLE_API_KEY"] = getpass("AIzaSyB4d3qqDexk-f_H7I3N9L_0cls_xW7xYe8")
+# # Check for Google API key
+# if "GOOGLE_API_KEY" not in os.environ:
+#     # os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
+#     os.environ["GOOGLE_API_KEY"] = getpass("AIzaSyB4d3qqDexk-f_H7I3N9L_0cls_xW7xYe8")
+
+os.environ["GOOGLE_API_KEY"] = "AIzaSyB4d3qqDexk-f_H7I3N9L_0cls_xW7xYe8"
 
 # Styling for the Streamlit page
 def style_page():
