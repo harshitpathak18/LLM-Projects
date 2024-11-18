@@ -17,8 +17,7 @@ load_dotenv()
 
 # Check for Google API key
 if "GOOGLE_API_KEY" not in os.environ:
-    # os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
-    os.environ["GOOGLE_API_KEY"] = "AIzaSyCzwsSx2oFmRdpOEd4l-QJOb36J6VSQ1Yk"
+    os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
 
 # Styling for the Streamlit page
 def style_page():
