@@ -144,6 +144,7 @@ def clear_chat_history():
     """
     st.session_state.messages = [{"role": "assistant", "content": "Ask me any question."}]
 
+
 # Handle user input and fetch response from vector store
 def user_input(user_question):
     """
@@ -164,59 +165,81 @@ def user_input(user_question):
     
     return response
 
+
 def main():
     """
     Main function to drive the application. Handles the user interface, file uploads, and interactions.
+    Includes exception handling and user-friendly messages.
     """
-    
-    # Main content area
-    st.title("PDF QueryBot")
-    st.write("Effortless Conversations with Your Documents!")
-    pdf_docs = st.file_uploader("Upload PDF Files", accept_multiple_files=True)
-    if st.button("Submit & Process"):
-        with st.spinner("Processing..."):
-            raw_text = get_pdf_text(pdf_docs)
-            text_chunks = get_text_chunks(raw_text)
-            get_vector_store(text_chunks)
-            st.success("Processing done. Now you can ask questions.")
+    try:
+        # Main content area
+        st.title("PDF QueryBot")
+        st.write("Effortless Conversations with Your Documents!")
+        
+        # File uploader
+        pdf_docs = st.file_uploader("Upload PDF Files", accept_multiple_files=True)
 
-    # Only allow querying if PDFs are uploaded and processed
-    if "faiss_index" in os.listdir() and pdf_docs:  
-        # Initialize chat history if not present
-        if "messages" not in st.session_state.keys():
-            st.session_state.messages = [{"role": "assistant", "content": "Ask me any question."}]
+        if not pdf_docs:
+            st.info("Please upload at least one PDF file")
+        else:
+            with st.spinner("Processing..."):
+                try:
+                    # Processing uploaded PDFs
+                    raw_text = get_pdf_text(pdf_docs)
+                    text_chunks = get_text_chunks(raw_text)
+                    get_vector_store(text_chunks)
+                    st.success("Processing done. Now you can ask questions.")
+                except Exception as e:
+                    st.error(f"An error occurred during PDF processing: {str(e)}")
+                    return
 
-        # Display the chat history
-        for message in st.session_state.messages:
-            with st.chat_message(message["role"]):
-                st.write(message["content"])
+        # Ensure querying is only allowed after processing
+        if "faiss_index" in os.listdir() and pdf_docs:
+            # Initialize chat history if not present
+            if "messages" not in st.session_state.keys():
+                st.session_state.messages = [{"role": "assistant", "content": "Ask me any question."}]
 
-        # Handling user input and displaying response
-        if prompt := st.chat_input():
-            st.session_state.messages.append({"role": "user", "content": prompt})
-            with st.chat_message("user"):
-                st.write(prompt)
+            # Display the chat history
+            for message in st.session_state.messages:
+                with st.chat_message(message["role"]):
+                    st.write(message["content"])
 
-            # Get the bot's response to the user input
-            if st.session_state.messages[-1]["role"] != "assistant":
-                with st.chat_message("assistant"):
-                    with st.spinner("Generating Answer..."):
-                        response = user_input(prompt)
-                        placeholder = st.empty()
-                        full_response = ''
-                        for item in response['output_text']:
-                            full_response += item
-                            placeholder.markdown(full_response)
-                        placeholder.markdown(full_response)
+            # Handle user input and responses
+            if prompt := st.chat_input():
+                st.session_state.messages.append({"role": "user", "content": prompt})
+                with st.chat_message("user"):
+                    st.write(prompt)
 
-                # Append the assistant's response to the session state
-                message = {"role": "assistant", "content": full_response}
-                st.session_state.messages.append(message)
+                try:
+                    # Generate and display the bot's response
+                    if st.session_state.messages[-1]["role"] != "assistant":
+                        with st.chat_message("assistant"):
+                            with st.spinner("Generating Answer..."):
+                                response = user_input(prompt)
+                                placeholder = st.empty()
+                                full_response = ''
+                                for item in response['output_text']:
+                                    full_response += item
+                                    placeholder.markdown(full_response)
+                                placeholder.markdown(full_response)
 
+                        # Append the assistant's response to the session state
+                        message = {"role": "assistant", "content": full_response}
+                        st.session_state.messages.append(message)
+
+                except Exception as e:
+                    st.error(f"An error occurred while generating the response: {str(e)}")
+
+            # Button to clear chat history
             st.button('Clear Chat History', on_click=clear_chat_history)
-    else:
-        st.write("Please upload some PDFs and process them before asking questions.")
-    
+
+        else:
+            pass
+
+    except Exception as e:
+        # Catch-all for unexpected errors
+        st.error(f"An unexpected error occurred: {str(e)}")
+
 if __name__ == "__main__":
     style_page()
     main()
