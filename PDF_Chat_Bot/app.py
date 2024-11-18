@@ -223,7 +223,7 @@ def main():
     st.write("Effortless Conversations with Your Documents!")
     
     pdf_docs = st.file_uploader("Upload PDF Files then Submit & Process", accept_multiple_files=True)
-    c1, c2 = st.columns([2,1])
+    c1, c2 = st.columns([3,1])
     with c1:
         if st.button("Submit & Process"):
             with st.spinner("Processing..."):
@@ -234,6 +234,7 @@ def main():
 
     with c2: 
         st.button('Clear Chat History', on_click=clear_chat_history)
+        
         
     # Only allow querying if PDFs are uploaded and processed
     if "faiss_index" in os.listdir() and pdf_docs:  
