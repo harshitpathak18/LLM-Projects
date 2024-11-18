@@ -119,7 +119,7 @@ def get_vector_store(chunks):
     Args:
         chunks (list): List of text chunks.
     """
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-004")
     
     # Remove the existing FAISS index directory if it exists
     if os.path.exists("faiss_index"):
@@ -143,7 +143,7 @@ def get_conversational_chain():
     Question: \n{question}\n
     Answer:
     """
-    model = ChatGoogleGenerativeAI(model="gemini-1.5-pro", temperature=0.5)
+    model = ChatGoogleGenerativeAI(model="gemini-1.0-pro", temperature=0.5)
     prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
     chain = load_qa_chain(llm=model, chain_type="stuff", prompt=prompt)
     return chain
