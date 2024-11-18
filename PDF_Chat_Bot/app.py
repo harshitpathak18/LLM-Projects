@@ -216,21 +216,25 @@ def main():
     #             get_vector_store(text_chunks)
     #             st.success("Processing done. Now you can ask questions.")
 
-    st.sidebar.button('Clear Chat History', on_click=clear_chat_history)
+    # st.sidebar.button('Clear Chat History', on_click=clear_chat_history)
 
     # Main content area
     st.title("PDF QueryBot")
     st.write("Effortless Conversations with Your Documents!")
     
     pdf_docs = st.file_uploader("Upload PDF Files then Submit & Process", accept_multiple_files=True)
-    if st.button("Submit & Process"):
-        with st.spinner("Processing..."):
-            raw_text = get_pdf_text(pdf_docs)
-            text_chunks = get_text_chunks(raw_text)
-            get_vector_store(text_chunks)
-            st.success("Processing done. Now you can ask questions.")
+    c1, c2 = st.columns([2,1])
+    with c1:
+        if st.button("Submit & Process"):
+            with st.spinner("Processing..."):
+                raw_text = get_pdf_text(pdf_docs)
+                text_chunks = get_text_chunks(raw_text)
+                get_vector_store(text_chunks)
+                st.success("Processing done. Now you can ask questions.")
 
-
+    with c2: 
+        st.button('Clear Chat History', on_click=clear_chat_history)
+        
     # Only allow querying if PDFs are uploaded and processed
     if "faiss_index" in os.listdir() and pdf_docs:  
         # Initialize chat history if not present
