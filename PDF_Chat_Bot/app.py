@@ -68,6 +68,10 @@ def style_page():
                 min-width: auto;
                 max-width: initial;
             }
+
+            ._terminalButton_rix23_138 {
+                visibility: hidden;
+            }
             
             </style>
             """
