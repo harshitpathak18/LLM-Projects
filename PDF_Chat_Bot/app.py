@@ -119,6 +119,8 @@ def get_vector_store(chunks):
     Args:
         chunks (list): List of text chunks.
     """
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+    
     # Remove the existing FAISS index directory if it exists
     if os.path.exists("faiss_index"):
         shutil.rmtree("faiss_index")
