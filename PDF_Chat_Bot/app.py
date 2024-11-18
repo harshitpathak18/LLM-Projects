@@ -19,8 +19,6 @@ load_dotenv()
 if "GOOGLE_API_KEY" not in os.environ:
     os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
 
-# os.environ["GOOGLE_API_KEY"] = "AIzaSyB4d3qqDexk-f_H7I3N9L_0cls_xW7xYe8"
-
 # Styling for the Streamlit page
 def style_page():
     """
@@ -121,7 +119,7 @@ def get_vector_store(chunks):
     Args:
         chunks (list): List of text chunks.
     """
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+    embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
     
     # Remove the existing FAISS index directory if it exists
     if os.path.exists("faiss_index"):
