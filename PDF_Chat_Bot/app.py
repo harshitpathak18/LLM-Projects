@@ -159,12 +159,13 @@ def get_conversational_chain():
         Langchain chain: Configured QA chain for handling user questions.
     """
     prompt_template = """
-    Answer the question as detailed as possible from the provided context and try to find out that question. please answer the question from the context only. if you cannot answer the question from the context then please reply, "Question can not be answered from the provided context"
+    Answer the question as detailed as possible from the provided context and try to find out that question. please answer the question from the context only. 
+    don't answer outside the context.
     Context:\n {context}?\n
     Question: \n{question}\n
     Answer:
     """
-    model = ChatGoogleGenerativeAI(model="gemini-1.0-pro", temperature=0.8)
+    model = ChatGoogleGenerativeAI(model="gemini-1.5-pro", temperature=0.8)
     prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
     chain = load_qa_chain(llm=model, chain_type="stuff", prompt=prompt)
     return chain
@@ -205,21 +206,30 @@ def main():
     Main function to drive the application. Handles the user interface, file uploads, and interactions.
     """
     # Sidebar for uploading PDFs
-    st.sidebar.title('PDF QueryBot')
-    with st.sidebar:
-        pdf_docs = st.file_uploader("Upload PDF Files then Submit & Process", accept_multiple_files=True)
-        if st.button("Submit & Process"):
-            with st.spinner("Processing..."):
-                raw_text = get_pdf_text(pdf_docs)
-                text_chunks = get_text_chunks(raw_text)
-                get_vector_store(text_chunks)
-                st.success("Processing done. Now you can ask questions.")
+    # st.sidebar.title('PDF QueryBot')
+    # with st.sidebar:
+    #     pdf_docs = st.file_uploader("Upload PDF Files then Submit & Process", accept_multiple_files=True)
+    #     if st.button("Submit & Process"):
+    #         with st.spinner("Processing..."):
+    #             raw_text = get_pdf_text(pdf_docs)
+    #             text_chunks = get_text_chunks(raw_text)
+    #             get_vector_store(text_chunks)
+    #             st.success("Processing done. Now you can ask questions.")
 
     st.sidebar.button('Clear Chat History', on_click=clear_chat_history)
 
     # Main content area
     st.title("PDF QueryBot")
     st.write("Effortless Conversations with Your Documents!")
+    
+    pdf_docs = st.file_uploader("Upload PDF Files then Submit & Process", accept_multiple_files=True)
+    if st.button("Submit & Process"):
+        with st.spinner("Processing..."):
+            raw_text = get_pdf_text(pdf_docs)
+            text_chunks = get_text_chunks(raw_text)
+            get_vector_store(text_chunks)
+            st.success("Processing done. Now you can ask questions.")
+
 
     # Only allow querying if PDFs are uploaded and processed
     if "faiss_index" in os.listdir() and pdf_docs:  
