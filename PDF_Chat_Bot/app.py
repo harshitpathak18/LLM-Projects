@@ -18,7 +18,7 @@ load_dotenv()
 # Check for Google API key
 if "GOOGLE_API_KEY" not in os.environ:
     # os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
-    os.environ["GOOGLE_API_KEY"] = "AIzaSyCgilW9YsMEc4aaxnz-ffSDp5yKraKCgZw"
+    os.environ["GOOGLE_API_KEY"] = "AIzaSyCzwsSx2oFmRdpOEd4l-QJOb36J6VSQ1Yk"
 
 # Styling for the Streamlit page
 def style_page():
@@ -144,7 +144,7 @@ def get_conversational_chain():
     Question: \n{question}\n
     Answer:
     """
-    model = ChatGoogleGenerativeAI(model="gemini-1.5-pro", temperature=0.5)
+    model = ChatGoogleGenerativeAI(model="gemini-1.5-flash-8b", temperature=0.5)
     prompt = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
     chain = load_qa_chain(llm=model, chain_type="stuff", prompt=prompt)
     return chain
