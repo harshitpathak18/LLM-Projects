@@ -1,4 +1,5 @@
 import os
+import shutil
 import streamlit as st
 from PyPDF2 import PdfReader
 from dotenv import load_dotenv
@@ -118,10 +119,14 @@ def get_vector_store(chunks):
     Args:
         chunks (list): List of text chunks.
     """
-    embeddings = GoogleGenerativeAIEmbeddings(model="models/embedding-001")
+    # Remove the existing FAISS index directory if it exists
+    if os.path.exists("faiss_index"):
+        shutil.rmtree("faiss_index")
+    
     vector_store = FAISS.from_texts(chunks, embedding=embeddings)
     vector_store.save_local("faiss_index")
-
+    
+    
 # Create a conversational QA chain
 def get_conversational_chain():
     """
