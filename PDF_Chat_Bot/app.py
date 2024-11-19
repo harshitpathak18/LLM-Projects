@@ -138,7 +138,8 @@ def get_conversational_chain():
         Langchain chain: Configured QA chain for handling user questions.
     """
     prompt_template = """
-    Answer the question as detailed as possible from the provided context from single of multiple pdfs"
+    Answer the question as detailed as possible from the provided context from single of multiple pdfs.
+    Answer the question in same language of the context"
     Context:\n {context}?\n
     Question: \n{question}\n
     Answer:
