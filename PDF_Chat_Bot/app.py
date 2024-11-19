@@ -139,7 +139,7 @@ def get_conversational_chain():
     """
     prompt_template = """
     Answer the question as detailed as possible from the provided context from single of multiple pdfs.
-    Answer the question in same language of the context"
+    Answer the question in same language of the context which is if context in hindi then answer in hindi & if context in english then answer in english only"
     Context:\n {context}?\n
     Question: \n{question}\n
     Answer:
